@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -36,6 +37,32 @@ func (g *game) new(sizeX, sizeY int) {
 
 	for g.generating {
 		g.generate()
+	}
+}
+
+// run process the game
+func (g *game) run() {
+	for {
+		g.draw()
+		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+// draws the game
+func (g *game) draw() {
+	clearScreen()
+	for _, tiles := range g.grid {
+		for i, tile := range tiles {
+			if tile == wall {
+				fmt.Print("■")
+			} else {
+				fmt.Print(" ")
+			}
+
+			if i == len(tiles)-1 {
+				fmt.Print("\n")
+			}
+		}
 	}
 }
 
