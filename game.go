@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 type game struct {
 	grid         [][]tile
@@ -10,6 +13,8 @@ type game struct {
 
 // new creates a new game
 func (g *game) new(sizeX, sizeY int) {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	g.attemptsLeft = 5
 	g.generating = true
 
