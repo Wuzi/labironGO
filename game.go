@@ -58,15 +58,15 @@ func (g *game) generate() {
 		g.attemptsLeft--
 		if g.attemptsLeft < 0 {
 			possibleExits := []int{}
-			for x := 0; x < len(g.grid); x++ {
-				if g.getTile(x, len(g.grid[0])-2) == ground {
-					possibleExits = append(possibleExits, x)
+			for y := 0; y < len(g.grid[0]); y++ {
+				if g.getTile(len(g.grid)-2, y) == ground {
+					possibleExits = append(possibleExits, y)
 				}
 			}
 
 			// create a random exit
-			x := possibleExits[rand.Intn(len(possibleExits))]
-			g.setTile(x, len(g.grid[0])-1, ground)
+			y := possibleExits[rand.Intn(len(possibleExits))]
+			g.setTile(len(g.grid)-1, y, ground)
 
 			g.generating = false
 		}
