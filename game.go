@@ -10,6 +10,7 @@ type game struct {
 	grid         [][]tile
 	attemptsLeft int
 	generating   bool
+	player       player
 }
 
 // new creates a new game
@@ -38,12 +39,22 @@ func (g *game) new(sizeX, sizeY int) {
 	for g.generating {
 		g.generate()
 	}
+
+	// create player right below the starting point
+	g.player = player{1, len(g.grid[0]) / 2}
 }
 
 // run process the game
 func (g *game) run() {
 	for {
 		g.draw()
+
+		input, _ := readInput()
+		if input == "ESC" {
+			break
+		}
+
+		g.player.move(input, g)
 		time.Sleep(200 * time.Millisecond)
 	}
 }
@@ -54,7 +65,7 @@ func (g *game) draw() {
 	for _, tiles := range g.grid {
 		for i, tile := range tiles {
 			if tile == wall {
-				fmt.Print("■")
+				fmt.Print("@")
 			} else {
 				fmt.Print(" ")
 			}
@@ -64,6 +75,9 @@ func (g *game) draw() {
 			}
 		}
 	}
+
+	moveCursor(g.player.x, g.player.y)
+	fmt.Printf("P")
 }
 
 // generates a new map
