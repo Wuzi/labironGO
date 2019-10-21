@@ -62,6 +62,7 @@ func (g *game) run() {
 // draws the game
 func (g *game) draw() {
 	clearScreen()
+
 	for _, tiles := range g.grid {
 		for i, tile := range tiles {
 			if tile == wall {
@@ -78,6 +79,8 @@ func (g *game) draw() {
 
 	moveCursor(g.player.x, g.player.y)
 	fmt.Printf("P")
+
+	moveCursor(len(g.grid), 0)
 }
 
 // generates a new map
