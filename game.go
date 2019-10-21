@@ -63,16 +63,17 @@ func (g *game) run() {
 func (g *game) draw() {
 	clearScreen()
 
-	for _, tiles := range g.grid {
-		for i, tile := range tiles {
+	for i, tiles := range g.grid {
+		for j, tile := range tiles {
 			if tile == wall {
 				fmt.Print("@")
 			} else {
 				fmt.Print(" ")
 			}
 
-			if i == len(tiles)-1 {
+			if j == len(tiles)-1 {
 				fmt.Print("\n")
+				moveCursor(i+1, 0)
 			}
 		}
 	}

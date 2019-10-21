@@ -3,27 +3,22 @@ package main
 import (
 	"log"
 	"os"
-	"os/exec"
+
+	"golang.org/x/crypto/ssh/terminal"
 )
 
-func init() {
-	cbTerm := exec.Command("/bin/stty", "cbreak", "-echo")
-	cbTerm.Stdin = os.Stdin
+var oldState *terminal.State
 
-	err := cbTerm.Run()
+func init() {
+	var err error
+	oldState, err = terminal.MakeRaw(0)
 	if err != nil {
-		log.Fatalf("Unable to activate cbreak mode terminal: %v\n", err)
+		log.Fatalf("Unable to activate raw mode terminal: %v\n", err)
 	}
 }
 
 func exit() {
-	cookedTerm := exec.Command("/bin/stty", "-cbreak", "echo")
-	cookedTerm.Stdin = os.Stdin
-
-	err := cookedTerm.Run()
-	if err != nil {
-		log.Fatalf("Unable to activate cooked mode terminal: %v\n", err)
-	}
+	terminal.Restore(0, oldState)
 }
 
 func readInput() (string, error) {
