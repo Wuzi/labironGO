@@ -40,6 +40,9 @@ func (g *game) new(sizeX, sizeY int) {
 		g.generate()
 	}
 
+	// close entrance
+	g.grid[0][len(g.grid[0])/2] = wall
+
 	// create player right below the starting point
 	g.player = player{1, len(g.grid[0]) / 2}
 }

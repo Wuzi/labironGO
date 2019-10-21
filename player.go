@@ -16,7 +16,7 @@ func (p *player) move(direction string, g *game) {
 		}
 	case "DOWN":
 		p.x++
-		if p.x == len(g.grid)-1 {
+		if p.x == len(g.grid) {
 			p.x--
 		}
 	case "RIGHT":
