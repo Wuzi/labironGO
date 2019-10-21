@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"syscall"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -11,14 +12,14 @@ var oldState *terminal.State
 
 func init() {
 	var err error
-	oldState, err = terminal.MakeRaw(0)
+	oldState, err = terminal.MakeRaw(int(syscall.Stdin))
 	if err != nil {
 		log.Fatalf("Unable to activate raw mode terminal: %v\n", err)
 	}
 }
 
 func exit() {
-	terminal.Restore(0, oldState)
+	terminal.Restore(int(syscall.Stdin), oldState)
 }
 
 func readInput() (string, error) {
