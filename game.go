@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -11,6 +10,7 @@ type game struct {
 	attemptsLeft int
 	generating   bool
 	player       player
+	scene        scene
 }
 
 // new creates a new game
@@ -49,42 +49,47 @@ func (g *game) new(sizeX, sizeY int) {
 
 // run process the game
 func (g *game) run() {
+	input := make(chan string)
+	go func(ch chan<- string) {
+		for {
+			input, err := readInput()
+			if err != nil {
+				ch <- "ESC"
+			}
+			ch <- input
+		}
+	}(input)
+
 	for {
 		g.draw()
 
-		input, _ := readInput()
-		if input == "ESC" {
+		if g.scene == quit {
 			break
 		}
 
-		g.player.move(input, g)
+		select {
+		case inp := <-input:
+			if inp == "ESC" {
+				g.scene = gameover
+			}
+			g.player.move(inp, g)
+		default:
+		}
+
 		time.Sleep(200 * time.Millisecond)
 	}
 }
 
 // draws the game
 func (g *game) draw() {
-	clearScreen()
-
-	for i, tiles := range g.grid {
-		for j, tile := range tiles {
-			if tile == wall {
-				fmt.Print("@")
-			} else {
-				fmt.Print(" ")
-			}
-
-			if j == len(tiles)-1 {
-				fmt.Print("\n")
-				moveCursor(i+1, 0)
-			}
-		}
+	switch g.scene {
+	case intro:
+		g.drawIntroScene()
+	case gameover:
+		g.drawGameoverScene()
+	default:
+		g.drawGameplayScene()
 	}
-
-	moveCursor(g.player.x, g.player.y)
-	fmt.Printf("P")
-
-	moveCursor(len(g.grid), 0)
 }
 
 // generates a new map
