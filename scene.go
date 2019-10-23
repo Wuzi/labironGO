@@ -21,7 +21,7 @@ func (g *game) drawGameplayScene() {
 	for i, tiles := range g.grid {
 		for j, tile := range tiles {
 			if tile == wall {
-				fmt.Print("@")
+				fmt.Printf("\x1b[42m \x1b[0m")
 			} else {
 				fmt.Print(" ")
 			}
@@ -34,7 +34,7 @@ func (g *game) drawGameplayScene() {
 	}
 
 	moveCursor(g.player.x, g.player.y)
-	fmt.Printf("P")
+	fmt.Printf("\x1b[41m \x1b[0m")
 
 	moveCursor(len(g.grid)+2, 0)
 	fmt.Printf("Press ESC to give up")
