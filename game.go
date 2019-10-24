@@ -33,18 +33,18 @@ func (g *game) new(sizeX, sizeY int) {
 		}
 	}
 
-	// create a starting point in the middle of first row to generate from
-	g.grid[0][len(g.grid[0])/2] = ground
+	// create a starting point in the middle of first column to generate from
+	g.grid[len(g.grid)/2][0] = ground
 
 	for g.generating {
 		g.generate()
 	}
 
 	// close entrance
-	g.grid[0][len(g.grid[0])/2] = wall
+	g.grid[len(g.grid)/2][0] = wall
 
-	// create player right below the starting point
-	g.player = player{1, len(g.grid[0]) / 2}
+	// create player on the left
+	g.player = player{len(g.grid) / 2, 1}
 }
 
 // run process the game
@@ -111,15 +111,15 @@ func (g *game) generate() {
 		g.attemptsLeft--
 		if g.attemptsLeft < 0 {
 			possibleExits := []int{}
-			for y := 0; y < len(g.grid[0]); y++ {
-				if g.getTile(len(g.grid)-2, y) == ground {
-					possibleExits = append(possibleExits, y)
+			for x := 0; x < len(g.grid); x++ {
+				if g.getTile(x, len(g.grid[0])-2) == ground {
+					possibleExits = append(possibleExits, x)
 				}
 			}
 
 			// create a random exit
-			y := possibleExits[rand.Intn(len(possibleExits))]
-			g.setTile(len(g.grid)-1, y, ground)
+			x := possibleExits[rand.Intn(len(possibleExits))]
+			g.setTile(x, len(g.grid[0])-1, ground)
 
 			g.generating = false
 		}
