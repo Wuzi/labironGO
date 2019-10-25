@@ -51,6 +51,16 @@ func (g *game) drawIntroScene() {
 	g.scene = gameplay
 }
 
+func (g *game) drawEscapedScene() {
+	clearScreen()
+
+	fmt.Println("Congratulations! You escaped the maze.")
+	time.Sleep(5 * time.Second)
+
+	clearScreen()
+	g.scene = quit
+}
+
 func (g *game) drawGameoverScene() {
 	clearScreen()
 

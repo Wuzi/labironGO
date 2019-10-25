@@ -72,7 +72,12 @@ func (g *game) run() {
 			if inp == "ESC" {
 				g.scene = gameover
 			}
+
 			g.player.move(inp, g)
+
+			if g.player.y == len(g.grid[0])-1 {
+				g.scene = escaped
+			}
 		default:
 		}
 
@@ -87,6 +92,8 @@ func (g *game) draw() {
 		g.drawIntroScene()
 	case gameover:
 		g.drawGameoverScene()
+	case escaped:
+		g.drawEscapedScene()
 	default:
 		g.drawGameplayScene()
 	}
