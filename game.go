@@ -44,7 +44,14 @@ func (g *game) new(sizeX, sizeY int) {
 	g.grid[len(g.grid)/2][0] = wall
 
 	// create player on the left
-	g.player = player{len(g.grid) / 2, 1}
+	possibleSpawns := []int{}
+	for x := 0; x < len(g.grid); x++ {
+		if g.getTile(x, 1) == ground {
+			possibleSpawns = append(possibleSpawns, x)
+		}
+	}
+	x := possibleSpawns[rand.Intn(len(possibleSpawns))]
+	g.player = player{x, 1}
 }
 
 // run process the game
